@@ -6,6 +6,7 @@
       "Collection": "Fun",
       "Rarity": "Common",
       "ImagePath": "C:\\Users\\pinba\\OneDrive\\Desktop\\Loot Box\\duck.png",
+      "Base64Image": null,
       "Weight": 10
     },
     {
@@ -14,6 +15,7 @@
       "Collection": "DBD Killers",
       "Rarity": "Common",
       "ImagePath": "images/Slasher.png",
+      "Base64Image": null,
       "Weight": 10
     }
   ],
