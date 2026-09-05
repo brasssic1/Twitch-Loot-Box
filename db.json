@@ -6,7 +6,6 @@
       "Collection": "Fun",
       "Rarity": "Common",
       "ImagePath": "images/duck.png",
-      "Base64Image": null,
       "Weight": 10
     },
     {
@@ -15,7 +14,6 @@
       "Collection": "DBD Killers",
       "Rarity": "Common",
       "ImagePath": "images/Slasher.png",
-      "Base64Image": null,
       "Weight": 10
     }
   ],
@@ -24,6 +22,20 @@
       {
         "ItemName": "Slasher",
         "Collection": "DBD Killers",
+        "Rarity": "Common",
+        "Quantity": 1
+      }
+    ],
+    "brasssic": [
+      {
+        "ItemName": "Slasher",
+        "Collection": "DBD Killers",
+        "Rarity": "Common",
+        "Quantity": 1
+      },
+      {
+        "ItemName": "Duck",
+        "Collection": "Fun",
         "Rarity": "Common",
         "Quantity": 1
       }
