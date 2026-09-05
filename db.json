@@ -1,1 +1,38 @@
-{}
+{
+  "Items": [
+    {
+      "Id": "cdd714b6",
+      "Name": "Duck",
+      "Collection": "Fun",
+      "Rarity": "Common",
+      "ImagePath": "C:\\Users\\pinba\\OneDrive\\Desktop\\Loot Box\\duck.png",
+      "Weight": 10
+    },
+    {
+      "Id": "2cd6216b",
+      "Name": "Slasher",
+      "Collection": "DBD Killers",
+      "Rarity": "Common",
+      "ImagePath": "C:\\Users\\pinba\\OneDrive\\Desktop\\Loot Box\\Collection images\\DBD Killer\\Slasher.png",
+      "Weight": 10
+    }
+  ],
+  "Inventories": {
+    "ur_girlfriend33": [
+      {
+        "ItemName": "Slasher",
+        "Collection": "DBD Killers",
+        "Rarity": "Common",
+        "Quantity": 1
+      }
+    ],
+    "brasssic": [
+      {
+        "ItemName": "Slasher",
+        "Collection": "DBD Killers",
+        "Rarity": "Common",
+        "Quantity": 1
+      }
+    ]
+  }
+}
