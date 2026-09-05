@@ -88,7 +88,7 @@
             let img = itemDef.ImagePath || '';
             html += `
                 <div class="card">
-                    <img src="${img}" onerror="this.style.display='none'">
+                    <img src="${img}" onerror="this.src='images/placeholder.png'; this.onerror=null;" style="max-width:90px; max-height:90px; object-fit:contain;">
                     <div class="item-name">${item.ItemName}</div>
                     <div class="item-meta">${item.Rarity} | ${item.Collection}</div>
                     <div style="margin-top: 6px; font-size: 11px; color: #FFC107;">Qty: x${item.Quantity}</div>
