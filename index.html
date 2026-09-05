@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streamer.bot Loot Box Collections</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121218; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        h1 { color: #FFC107; margin-bottom: 5px; }
+        .search-box { margin: 20px 0; width: 100%; max-width: 500px; display: flex; gap: 10px; }
+        input { flex: 1; padding: 10px 15px; background: #1c1c26; border: 1px solid #333; color: #fff; border-radius: 6px; font-size: 16px; }
+        button { padding: 10px 20px; background: #FFC107; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; color: #121218; }
+        .container { width: 100%; max-width: 900px; margin-top: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .card { background: #1a1a24; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .card img { max-width: 90px; max-height: 90px; object-fit: contain; margin-bottom: 8px; }
+        .item-name { font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-meta { font-size: 12px; color: #888; margin-top: 4px; }
+        .search-result-item { background: #1a1a24; padding: 12px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #FFC107; }
+        .back-btn { background: transparent; color: #FFC107; border: 1px solid #FFC107; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 Loot Box Collections</h1>
+    <p id="subtitle">Search viewer inventories or view specific collections.</p>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search item name or viewer..." onkeyup="handleSearch(event)">
+        <button onclick="performSearch()">Search</button>
+    </div>
+
+    <div class="container" id="contentArea">
+        <p style="text-align: center; color: #888;">Loading database...</p>
+    </div>
+
+<script>
+    let globalDb = null;
+
+    async function loadDatabase() {
+        try {
+            // Replace with your raw GitHub file URL for db.json
+            let response = await fetch('db.json?t=' + Date.now());
+            globalDb = await response.json();
+            
+            // Check URL parameters (e.g., ?user=brasssic)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userParam = urlParams.get('user');
+
+            if (userParam) {
+                showUserInventory(userParam);
+            } else {
+                showHomeView();
+            }
+        } catch (e) {
+            document.getElementById('contentArea').innerHTML = `<p style="color: #ff5252; text-align: center;">Failed to load database. Make sure db.json is uploaded!</p>`;
+        }
+    }
+
+    function showHomeView() {
+        document.getElementById('subtitle').innerText = "Explore all active viewer collections.";
+        let html = `<h3>Active Collectors:</h3><div style="display: flex; flex-wrap: wrap; gap: 10px;">`;
+        
+        if (globalDb && globalDb.Inventories) {
+            for (let username in globalDb.Inventories) {
+                let count = globalDb.Inventories[username].reduce((sum, i) => sum + i.Quantity, 0);
+                html += `<a href="?user=${username}" style="background:#1c1c26; padding:10px 15px; border-radius:6px; color:#FFC107; text-decoration:none; border:1px solid #333;">${username} (${count} items)</a>`;
+            }
+        }
+        html += `</div>`;
+        document.getElementById('contentArea').innerHTML = html;
+    }
+
+    function showUserInventory(username) {
+        document.getElementById('subtitle').innerText = `Viewing collection for: @${username}`;
+        let userKey = Object.keys(globalDb.Inventories).find(k => k.toLowerCase() === username.toLowerCase());
+        
+        let html = `<button class="back-btn" onclick="window.location.href=window.location.pathname">⬅ Back to Home</button>`;
+        
+        if (!userKey || !globalDb.Inventories[userKey] || globalDb.Inventories[userKey].length === 0) {
+            html += `<p style="text-align: center; color: #888;">No items found for @${username}.</p>`;
+            document.getElementById('contentArea').innerHTML = html;
+            return;
+        }
+
+        html += `<div class="grid">`;
+        globalDb.Inventories[userKey].forEach(item => {
+            let itemDef = globalDb.Items.find(i => i.Name.toLowerCase() === item.ItemName.toLowerCase()) || {};
+            let img = itemDef.ImagePath || '';
+            html += `
+                <div class="card">
+                    <img src="${img}" onerror="this.style.display='none'">
+                    <div class="item-name">${item.ItemName}</div>
+                    <div class="item-meta">${item.Rarity} | ${item.Collection}</div>
+                    <div style="margin-top: 6px; font-size: 11px; color: #FFC107;">Qty: x${item.Quantity}</div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+        document.getElementById('contentArea').innerHTML = html;
+    }
+
+    function performSearch() {
+        let query = document.getElementById('searchInput').value.trim().toLowerCase();
+        if (!query || !globalDb) return;
+
+        let html = `<button class="back-btn" onclick="showHomeView()">⬅ Back to Home</button><h3>Search Results for "${query}":</h3>`;
+        let resultsFound = false;
+
+        for (let username in globalDb.Inventories) {
+            globalDb.Inventories[username].forEach(item => {
+                if (username.toLowerCase().includes(query) || item.ItemName.toLowerCase().includes(query) || item.Collection.toLowerCase().includes(query)) {
+                    resultsFound = true;
+                    html += `
+                        <div class="search-result-item">
+                            <div>
+                                <strong>@${username}</strong> owns <strong>${item.ItemName}</strong> (${item.Rarity} - ${item.Collection}) [x${item.Quantity}]
+                            </div>
+                            <a href="?user=${username}" style="color: #FFC107; font-size: 13px;">View Profile</a>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        if (!resultsFound) {
+            html += `<p style="color: #888;">No matches found.</p>`;
+        }
+
+        document.getElementById('contentArea').innerHTML = html;
+    }
+
+    function handleSearch(e) {
+        if (e.key === 'Enter') performSearch();
+    }
+
+    loadDatabase();
+</script>
+</body>
+</html>
