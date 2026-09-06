@@ -13,10 +13,10 @@
       "Id": "2cd6216b",
       "Name": "Slasher",
       "Collection": "DBD Killers",
-      "Rarity": "Common",
+      "Rarity": "Legendary",
       "ImagePath": "images/Slasher.png",
       "Base64Image": null,
-      "Weight": 10
+      "Weight": 3
     },
     {
       "Id": "b6fd10cb",
