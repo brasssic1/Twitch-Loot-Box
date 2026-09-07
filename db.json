@@ -337,5 +337,14 @@
       "Weight": 3
     }
   ],
-  "Inventories": {}
+  "Inventories": {
+    "brasssic": [
+      {
+        "ItemName": "Nightmare",
+        "Collection": "DBD Killers",
+        "Rarity": "Common",
+        "Quantity": 1
+      }
+    ]
+  }
 }
